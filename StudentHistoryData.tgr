@@ -1,0 +1,13 @@
+trigger StudentHistoryData on Student__c(after update){
+    list<Student__c> newDataList=Trigger.New;
+    list<Student__c> oldDataList=Trigger.Old;
+    list<Student_History__c> studentHistory=new List<Student_History__c>();
+    for(integer i=0;i<oldDataList.size();i++){
+        Map<String,Object>studentMap=newDataList[i].getPopulatedFieldsAsMap();
+        for(String fieldName:studentMap.keySet())
+            if((newDataList[i].get(fieldName)!=oldDataList[i].get(fieldName)) && !(OldDataList[i].get(fieldName) instanceof DateTime))
+                          
+            studentHistory.add(new Student_History__c(Name=fieldName,New_Value__c=(String)newDataList[i].get(fieldName),Old_Value__c=(String)oldDataList[i].get(fieldName),Record_Id__c=oldDataList[i].id));
+    }
+    insert studentHistory;                         
+}
